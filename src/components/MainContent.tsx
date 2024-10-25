@@ -44,6 +44,15 @@ const MainContent = () => {
   // http://i0.kym-cdn.com/entries/icons/original/000/002/232/bullet_cat.jpg
 
   const createToken = async () => {
+    if (!wallet.connected) {
+      alert("Connect wallet first...");
+      return;
+    }
+    if (decimals <= 0) {
+      alert("Provide decimals...");
+      return;
+    }
+
     const keyPair = Keypair.generate();
 
     const metadata: TokenMetadata = {
@@ -110,7 +119,7 @@ const MainContent = () => {
   const mintToken = async (keyPair: Keypair) => {
     const associatedToken = await getAssociatedTokenAddress(
       keyPair.publicKey,
-      wallet.publicKey,
+      wallet?.publicKey,
       false,
       TOKEN_2022_PROGRAM_ID
     );
@@ -134,14 +143,14 @@ const MainContent = () => {
         keyPair.publicKey,
         associatedToken,
         wallet.publicKey,
-        1000000000,
+        supply * (1 ^ decimals),
         [],
         TOKEN_2022_PROGRAM_ID
       )
     );
 
     await wallet.sendTransaction(transcation1, connection);
-    console.log("Minted 1000000000 Tokens");
+    console.log(`Minted ${supply} Tokens`);
   };
 
   return (
@@ -208,7 +217,6 @@ const MainContent = () => {
                   <Input
                     type="number"
                     placeholder=""
-                    value={"1"}
                     onChange={(e) => {
                       setSupply(e.target.valueAsNumber);
                     }}

@@ -33,13 +33,13 @@ const Navbar = () => {
         <Dialog>
           {!wallet ? (
             <DialogTrigger asChild>
-              <Button className="bg-violet-700 hover:bg-violet-900" size={"lg"}>
+              <Button className="bg-violet-600 hover:bg-violet-800" size={"lg"}>
                 Connet Wallet
               </Button>
             </DialogTrigger>
           ) : (
             <Button
-              className="bg-violet-700 hover:bg-violet-900"
+              className="bg-violet-600 hover:bg-violet-800"
               size={"lg"}
               onClick={async () => {
                 await disconnect();
@@ -71,6 +71,12 @@ const Navbar = () => {
                           select(walletList.adapter.name);
                         }}
                       >
+                        <img
+                          width={25}
+                          height={25}
+                          src={walletList.adapter.icon}
+                          className="m-2 rounded-lg"
+                        ></img>
                         {walletList.adapter.name}
                       </Button>
                     </DialogClose>
