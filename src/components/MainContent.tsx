@@ -56,7 +56,7 @@ const MainContent = () => {
     const keyPair = Keypair.generate();
 
     const metadata: TokenMetadata = {
-      updateAuthority: wallet.publicKey,
+      updateAuthority: wallet.publicKey ?? undefined,
       mint: keyPair.publicKey,
       name,
       symbol,
@@ -71,7 +71,7 @@ const MainContent = () => {
 
     const transcation = new Transaction().add(
       SystemProgram.createAccount({
-        fromPubkey: wallet.publicKey,
+        fromPubkey: wallet.publicKey!,
         newAccountPubkey: keyPair.publicKey,
         space: mintLen,
         lamports,
@@ -86,7 +86,7 @@ const MainContent = () => {
       createInitializeMintInstruction(
         keyPair.publicKey,
         decimals,
-        wallet.publicKey,
+        wallet.publicKey!,
         null,
         TOKEN_2022_PROGRAM_ID
       ),
@@ -97,12 +97,12 @@ const MainContent = () => {
         name: metadata.name,
         symbol: metadata.symbol,
         uri: metadata.uri,
-        mintAuthority: wallet.publicKey,
-        updateAuthority: wallet.publicKey,
+        mintAuthority: wallet.publicKey!,
+        updateAuthority: wallet.publicKey!,
       })
     );
 
-    transcation.feePayer = wallet.publicKey;
+    transcation.feePayer = wallet.publicKey!;
     transcation.recentBlockhash = (
       await connection.getLatestBlockhash()
     ).blockhash;
@@ -119,16 +119,16 @@ const MainContent = () => {
   const mintToken = async (keyPair: Keypair) => {
     const associatedToken = await getAssociatedTokenAddress(
       keyPair.publicKey,
-      wallet?.publicKey,
+      wallet?.publicKey!,
       false,
       TOKEN_2022_PROGRAM_ID
     );
 
     const transcation = new Transaction().add(
       createAssociatedTokenAccountInstruction(
-        wallet.publicKey,
+        wallet.publicKey!,
         associatedToken,
-        wallet.publicKey,
+        wallet.publicKey!,
         keyPair.publicKey,
         TOKEN_2022_PROGRAM_ID
       )
@@ -142,7 +142,7 @@ const MainContent = () => {
       createMintToInstruction(
         keyPair.publicKey,
         associatedToken,
-        wallet.publicKey,
+        wallet.publicKey!,
         supply * (1 ^ decimals),
         [],
         TOKEN_2022_PROGRAM_ID
