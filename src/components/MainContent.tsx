@@ -156,6 +156,8 @@ const MainContent = () => {
 
     await wallet.sendTransaction(transcation1, connection);
     console.log(`Minted ${supply} Tokens`);
+
+    alert("Token created successfully");
   };
 
   return (
