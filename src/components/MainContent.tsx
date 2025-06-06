@@ -52,11 +52,16 @@ const MainContent = () => {
       alert("Provide decimals...");
       return;
     }
+    
+    if(wallet.publicKey == null){
+      alert("Please connect your wallet");
+      return;
+    }
 
     const keyPair = Keypair.generate();
 
     const metadata: TokenMetadata = {
-      updateAuthority: wallet.publicKey ?? undefined,
+      updateAuthority: wallet.publicKey,
       mint: keyPair.publicKey,
       name,
       symbol,
